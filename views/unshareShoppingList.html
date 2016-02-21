@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<link href='https://fonts.googleapis.com/css?family=Roboto:400,300,700' rel='stylesheet' type='text/css'>
+		<link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">
+		<link rel="stylesheet" type="text/css" href="../../../styles.css">
+	</head>	
+	<body>
+		<div class="container">	
+			<div class="row top-menu">				
+				<div class="col-md-6">
+					<a href="/shoppinglist/">
+						<span class="glyphicon glyphicon-home" aria-hidden="true"></span>Show All Shopping Lists
+					</a>
+				</div> 
+				<div class="col-md-6 text-right">				
+					<% if(!loginstatus){ %>
+					   <a href="/login/">Login</a>
+					<% } else{ %>  
+					   <a href="/disconnect">Logout</a>
+					<% } %>
+				</div>
+			</div>
+			<div class="row divider green">
+				<div class="col-md-12"></div>
+			</div>
+			<div class="row banner menu">
+				<div class="col-md-11 col-md-offset-1 padding-none">
+					<h1>Unshare Shopping List <%- JSON.parse(JSON.stringify(shoppinglist[0].name)) %></h1>
+				</div>
+			</div>
+			<h2> Are you sure you want to unshare <%- JSON.parse(JSON.stringify(shoppinglist[0].name)) %>? </h2>
+			<div class="padding-bottom"></div>
+			<form action="#" method = 'post'>
+				<button type="submit" class="btn btn-default" id="submit" type="submit">
+				<span class="glyphicon glyphicon-thumbs-down" aria-hidden="true"></span>Unshare</button>
+			</form>
+		</div>
+	</body>
+</html>

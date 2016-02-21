@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<link href='https://fonts.googleapis.com/css?family=Roboto:400,300,700' rel='stylesheet' type='text/css'>
+		<link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">
+		<link rel="stylesheet" type="text/css" href="../styles.css">	
+		<!--LOAD PRE-REQUISITES FOR GOOGLE SIGN IN -->
+		<script src = "https://plus.google.com/js/client:platform.js" async defer></script>
+		<script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+    	<script src="//apis.google.com/js/platform.js?onload=start"></script>			
+    	<!-- END PRE-REQUISITES FOR GOOGLE SIGN IN -->
+    </head>
+    <body>
+		<div class="container">	
+			<div class="row top-menu">
+				<div class="col-md-6">
+					<a href="/shoppinglist/">
+						<span class="glyphicon glyphicon-home" aria-hidden="true"></span>Show All Shopping Lists
+					</a>
+				</div> 
+			</div>
+			<div class="row divider blue">
+				<div class="col-md-12"></div>
+			</div>
+			<div class="row banner main">
+				<div class="col-md-1"></div>
+				<div class="col-md-11 padding-none">
+					<h1>Shopping List Login</h1>
+				</div>
+			</div>
+			<br><br>
+			<!-- GOOGLE PLUS SIGN IN BUTTON-->          
+			<div id="gsignInButton">
+				<span class="g-signin"
+					data-scope="openid email"
+					data-clientid="361114796696-jk19iaob9jug7cp5vlrcer9ep0kujr7c.apps.googleusercontent.com"
+					data-redirecturi="postmessage"
+					data-accesstype="offline"
+					data-cookiepolicy="single_host_origin"
+					data-callback="signInCallback"
+					data-approvalprompt="force">
+				</span>
+			</div>
+			<!--END GOOGLE PLUS SIGN IN BUTTON -->
+			<br>
+			<!-- FACEBOOK SIGN IN BUTTON--> 
+			<div id="fbsignInButton">
+				<fb:login-button size="large" scope="public_profile,email" onlogin="sendTokenToServer();">
+				</fb:login-button>
+			</div>
+			<!--END FACEBOOK SIGN IN BUTTON -->
+			<!-- Textarea for output data -->
+			<div id="response" class="hide">
+				<textarea id="responseContainer" style="width:100%; height:150px"></textarea>
+			</div>    			
+			<div id="result"></div>
+		</div>
+		<script>			
+		/**
+		 * Handler for the signin callback triggered after the user selects an account.
+		 */	
+		var output = '';
+		var fullName = '';
+		var primaryEmail = '';
+		var imageUrl = '';
+		var providername = '';
+		var providerid = '';
+		
+		function signInCallback(authResult) {				
+			if (authResult['code']) {
+				// Hide the sign-in button now that the user is authorized
+				$('#gsignInButton').attr('style', 'display: none');
+				$('#fbsignInButton').attr('style', 'display: none');
+				
+				gapi.client.load('plus', 'v1', function apiClientLoaded() {
+					gapi.client.plus.people.get({userId: 'me'}).execute(function handleEmailResponse(resp) {
+						fullName = resp.name.givenName + " " + resp.name.familyName;
+						imageUrl = resp.image.url.split('?')[0];
+						providername = "google";
+						providerid = resp.id;
+						
+						for (var i=0; i < resp.emails.length; i++) {
+							if (resp.emails[i].type === 'account')
+								primaryEmail = resp.emails[i].value;
+						}						
+												
+						// Send the one-time-use code to the server, if the server responds, write a 'login successful' message to the web page and then redirect back to the main shoppinglists page		
+						$.ajax({
+							type: 'GET',
+							url: '/connect/',
+							processData: true,							
+							data:{ name: fullName, email: primaryEmail, picture: imageUrl, provider: providername, provider_id: providerid},
+							dataType: "json",
+							contentType: 'application/octet-stream; charset=utf-8',
+							success: function(result) {
+								// Handle or verify the server response if necessary.
+								if (result) {
+									console.log("Success");	
+
+									output += '<h1>Welcome, '
+									output += fullName
+									output += '!</h1>'
+									output += '<img src="'
+									output += imageUrl		
+									output += ' " style = "width: 300px; height: 300px;border-radius: 150px;-webkit-border-radius: 150px;-moz-border-radius: 150px;"> '	
+						
+									$('#result').html('<h2>Login Successful!</h2></br>'+ output + '</br><h3>Redirecting...</h3>');
+									
+									setTimeout(function() {
+										window.location.href = "/shoppinglist/";
+									}, 4000);							
+								}
+								else if (authResult['error']) {
+									console.log('There was an error: ' + authResult['error']);
+								}
+								else {
+									$('#result').html('Failed to make a server-side call. Check your configuration and console.');
+								}
+							}
+						});
+					});								
+				});				
+			}			
+		}		
+		</script>
+		<script type='text/json-data' id='some_data_set'>{ 'foo': 'bar', 'baz': 1 }</script>		
+		<!--END GOOGLE PLUS SIGN IN -->
+
+		<!--FACEBOOK SIGN IN -->
+		<script>
+		window.fbAsyncInit = function() {
+			FB.init({
+			appId      : '955838797830878',
+			//cookie     : false,  // enable cookies to allow the server to access 
+								// the session
+			xfbml      : true,  // parse social plugins on this page
+			version    : 'v2.2' // use version 2.2
+			});
+		};
+		// Load the SDK asynchronously
+		(function(d, s, id) {
+			var js, fjs = d.getElementsByTagName(s)[0];
+			if (d.getElementById(id)) return;
+			js = d.createElement(s); js.id = id;
+			js.src = "//connect.facebook.net/en_US/sdk.js";
+			fjs.parentNode.insertBefore(js, fjs);
+		}(document, 'script', 'facebook-jssdk'));
+		
+		
+		function sendTokenToServer() {
+			$('#gsignInButton').attr('style', 'display: none');
+			$('#fbsignInButton').attr('style', 'display: none');
+			var access_token = FB.getAuthResponse()['accessToken'];
+			console.log(access_token)
+			console.log('Welcome!  Fetching your information.... ');
+			FB.api('/me', { locale: 'en_US', fields: 'name, email, picture, id' }, function(response) {
+			
+				fullName = response.name;
+				primaryEmail = response.email;
+				providername = "facebook";
+				providerid = response.id;
+				
+				FB.api("/me/picture?width=180&height=180",  function(response) {			
+					imageUrl = response.data.url,
+					randomNumber = Math.floor(Math.random()*256);
+					console.log(imageUrl);			 	
+			
+					$.ajax({
+						type: 'GET',
+						url: '/connect/',
+						processData: true,
+						data:{ name: fullName, email: primaryEmail, picture: imageUrl, provider: providername, provider_id: providerid},
+						dataType: "json",
+						contentType: 'application/octet-stream; charset=utf-8',
+						success: function(result) {
+							// Handle or verify the server response if necessary.
+							if (result) {							
+								
+								output += '<h1>Welcome, '
+								output += fullName
+								output += '!</h1>'
+								output += '<img src="'
+								output += imageUrl
+								output += ' " style = "width: 300px; height: 300px;border-radius: 150px;-webkit-border-radius: 150px;-moz-border-radius: 150px;"> '
+								
+								$('#result').html('<h2>Login Successful!</h2></br>'+ output + '</br><h3>Redirecting...</h3>');
+								
+								setTimeout(function() {
+									window.location.href = "/shoppinglist/";
+								}, 4000);					
+							} 
+							else {
+								$('#result').html('Failed to make a server-side call. Check your configuration and console.');
+							}
+						}      
+					});
+				});
+			});
+		}
+	</script>
+	<!--END FACEBOOK SIGN IN -->
+    </body>
+</html>
