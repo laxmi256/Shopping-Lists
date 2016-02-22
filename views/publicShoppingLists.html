@@ -1,54 +1,54 @@
 <!DOCTYPE html>
 <html lang="en">
-	<head>
-		<link href='https://fonts.googleapis.com/css?family=Roboto:400,300,700' rel='stylesheet' type='text/css'>
-		<link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">
-		<link rel="stylesheet" type="text/css" href="../styles.css">
-	</head>	
-	<body>
-		<div class="container">			
-			<div class="row top-menu">				
-				<div class="col-md-6">
-					<a href="/shoppinglist/">
-						<span class="glyphicon glyphicon-home" aria-hidden="true"></span>Show All Shopping Lists
-					</a>
-				</div> 
-				<div class="col-md-6 text-right">				
-					<% if(!loginstatus){ %>
-					   <a href="/login/">Login</a>
-					<% } else{ %>  
-					   <a href="/disconnect">Logout</a>
-					<% } %>
-				</div>
-			</div>
-			<div class="row divider blue">
-				<div class="col-md-12"></div>
-			</div>
-			<div class="row banner main" background-image= "style/banner.jpg">
-				<div class="col-md-1"></div>
-				<div class="col-md-11 padding-none">
-					<h1>Shopping Lists</h1>
-				</div>
-			</div>
-			<div class = 'flash'>				       
-				<ul><li> <strong><%= message %></strong> </li></ul>
-			</div>	
-			<div class="row padding-top padding-bottom">
-				<div class="col-md-1"></div>
-				<div class="col-md-10 padding-none"></div>
-				<div class="col-md-1"></div>
-			</div>			
-			<% for(var i = 0; i < shoppinglists.length; i++) { %>			  
-				<a href = "/shoppinglist/<%= JSON.parse(JSON.stringify(shoppinglists[i].id)) %>/item/">
-				<div class="row">
-					<div class="col-md-1"></div>
-						<div class="col-md-10 shoppinglist-list">
-							<h3><%= JSON.parse(JSON.stringify(shoppinglists[i].name)) %></h3>
-						</div>
-					<div class="col-md-1"></div>
-				</div>
-				</a>				  
-			<% } %>	
-		</div>
-	</body>
+    <head>
+        <link href='https://fonts.googleapis.com/css?family=Roboto:400,300,700' rel='stylesheet' type='text/css'>
+        <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">
+        <link rel="stylesheet" type="text/css" href="../styles.css">
+    </head>    
+    <body>
+        <div class="container">            
+            <div class="row top-menu">                
+                <div class="col-md-6">
+                    <a href="/shoppinglist/">
+                        <span class="glyphicon glyphicon-home" aria-hidden="true"></span>Show All Shopping Lists
+                    </a>
+                </div> 
+                <div class="col-md-6 text-right">                
+                    <% if (!loginstatus){ %>
+                       <a href="/login/">Login</a>
+                    <% } else{ %>  
+                       <a href="/disconnect">Logout</a>
+                    <% } %>
+                </div>
+            </div>
+            <div class="row divider blue">
+                <div class="col-md-12"></div>
+            </div>
+            <div class="row banner main" background-image= "style/banner.jpg">
+                <div class="col-md-1"></div>
+                <div class="col-md-11 padding-none">
+                    <h1>Shopping Lists</h1>
+                </div>
+            </div>
+            <div class = 'flash'>                       
+                <ul><li> <strong><%= message %></strong> </li></ul>
+            </div>    
+            <div class="row padding-top padding-bottom">
+                <div class="col-md-1"></div>
+                <div class="col-md-10 padding-none"></div>
+                <div class="col-md-1"></div>
+            </div>            
+            <% for(var i = 0; i < shoppinglists.length; i++) { %>              
+                <a href = "/shoppinglist/<%= JSON.parse(JSON.stringify(shoppinglists[i].id)) %>/item/">
+                <div class="row">
+                    <div class="col-md-1"></div>
+                        <div class="col-md-10 shoppinglist-list">
+                            <h3><%= JSON.parse(JSON.stringify(shoppinglists[i].name)) %></h3>
+                        </div>
+                    <div class="col-md-1"></div>
+                </div>
+                </a>                  
+            <% } %>    
+        </div>
+    </body>
 </html>
