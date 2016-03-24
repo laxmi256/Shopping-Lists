@@ -13,12 +13,12 @@ app.engine('html', require('ejs').renderFile);
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
 
-app.use(function(req, res, next) {
-  res.header("Access-Control-Allow-Origin", "*");
-  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-  next();
+app.use(function (req, res, next) {
+    "use strict";
+    res.header("Access-Control-Allow-Origin", "*");
+    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+    next();
 });
-
 
 var pool = mysql.createPool({
     host: 'us-cdbr-iron-east-03.cleardb.net',
@@ -698,8 +698,31 @@ app.get('/user/:user_id/json', function (request, response) {
 });
 
 
+app.delete('/user/:user_id/json', function (request, response) {
+    "use strict";
+    pool.getConnection(function (err, connection) {
+        if (err) {
+            console.log('error : ', err);
+            throw err;
+        }
+        var user_id = request.params.user_id;
+        var sql = "delete from user where id=" + user_id + ";";
+        connection.query(sql, function (err) {
+            if (err) {
+                console.log('error : ', err);
+                connection.release();
+                throw err;
+            }
+            connection.commit();
+            sleep(1000);
+            connection.release();
+            response.send(200);
+        });
+    });
+});
 
-app.get('/shoppinglist/json/', function (request, response) {
+
+app.get('/shoppinglist/json', function (request, response) {
     "use strict";
     pool.getConnection(function (err, connection) {
         if (err) {
@@ -722,7 +745,7 @@ app.get('/shoppinglist/json/', function (request, response) {
 });
 
 
-app.get('/shoppinglist/:shoppinglist_id/json/', function (request, response) {
+app.get('/shoppinglist/:shoppinglist_id/json', function (request, response) {
     "use strict";
     pool.getConnection(function (err, connection) {
         if (err) {
@@ -746,14 +769,39 @@ app.get('/shoppinglist/:shoppinglist_id/json/', function (request, response) {
 });
 
 
-app.get('/item/json/', function (request, response) {
+app.delete('/shoppinglist/:shoppinglist_id/json', function (request, response) {
+    "use strict";
+    pool.getConnection(function (err, connection) {
+        if (err) {
+            console.log('error : ', err);
+            throw err;
+        }       
+        var shoppinglist_id = request.params.shoppinglist_id;
+        var sql = "delete from shoppinglist where id=" + shoppinglist_id + ";";
+        connection.query(sql, function (err) {
+            if (err) {
+                console.log('error : ', err);
+                connection.release();
+                throw err;
+            }
+            connection.commit();
+            sleep(1000);
+            connection.release();
+            response.send(200);
+        });
+    });
+});
+
+
+app.get('/item/json', function (request, response) {
     "use strict";
     pool.getConnection(function (err, connection) {
         if (err) {
             console.log('error : ', err);
             throw err;
         }
-        var sql = 'select * from item;';
+        var shoppinglist_id = request.params.shoppinglist_id;
+        var sql = "select * from item;";
         connection.query(sql, function (err, rows) {
             if (err) {
                 console.log('error : ', err);
@@ -769,7 +817,7 @@ app.get('/item/json/', function (request, response) {
 });
 
 
-app.get('/item/:item_id/json/', function (request, response) {
+app.get('/item/:item_id/json', function (request, response) {
     "use strict";
     pool.getConnection(function (err, connection) {
         if (err) {
@@ -792,8 +840,102 @@ app.get('/item/:item_id/json/', function (request, response) {
     });
 });
 
-app.post('/', function(req, res, next) {
- // Handle the post for this route
+
+app.delete('/item/:item_id/json', function (request, response) {
+    "use strict";
+    pool.getConnection(function (err, connection) {
+        if (err) {
+            console.log('error : ', err);
+            throw err;
+        }       
+        var item_id = request.params.item_id;
+        var sql = "delete from item where id=" + item_id + ";";
+        connection.query(sql, function (err) {
+            if (err) {
+                console.log('error : ', err);
+                connection.release();
+                throw err;
+            }
+            connection.commit();
+            sleep(1000);
+            connection.release();
+            response.send(200);
+        });
+    });
+});
+
+
+app.get('/shoppinglist/:shoppinglist_id/item/json', function (request, response) {
+    "use strict";
+    pool.getConnection(function (err, connection) {
+        if (err) {
+            console.log('error : ', err);
+            throw err;
+        }
+        var shoppinglist_id = request.params.shoppinglist_id;
+        var sql = "select * from item where shoppinglist_id=" + shoppinglist_id + ";";
+        connection.query(sql, function (err, rows) {
+            if (err) {
+                console.log('error : ', err);
+                connection.release();
+                throw err;
+            }
+            connection.commit();
+            sleep(1000);
+            connection.release();
+            response.send(rows);
+        });
+    });
+});
+
+
+app.get('/shoppinglist/:shoppinglist_id/item/:item_id/json', function (request, response) {
+    "use strict";
+    pool.getConnection(function (err, connection) {
+        if (err) {
+            console.log('error : ', err);
+            throw err;
+        }
+        var shoppinglist_id = request.params.shoppinglist_id;
+        var item_id = request.params.item_id;
+        var sql = "select * from item where shoppinglist_id=" + shoppinglist_id + " and id=" + item_id + ";";
+        connection.query(sql, function (err, rows) {
+            if (err) {
+                console.log('error : ', err);
+                connection.release();
+                throw err;
+            }
+            connection.commit();
+            sleep(1000);
+            connection.release();
+            response.send(rows);
+        });
+    });
+});
+
+
+app.delete('/shoppinglist/:shoppinglist_id/item/:item_id/json', function (request, response) {
+    "use strict";
+    pool.getConnection(function (err, connection) {
+        if (err) {
+            console.log('error : ', err);
+            throw err;
+        }
+        var shoppinglist_id = request.params.shoppinglist_id;   
+        var item_id = request.params.item_id;
+        var sql = "delete from item where shoppinglist_id=" + shoppinglist_id + " and id=" + item_id + ";";
+        connection.query(sql, function (err) {
+            if (err) {
+                console.log('error : ', err);
+                connection.release();
+                throw err;
+            }
+            connection.commit();
+            sleep(1000);
+            connection.release();           
+            response.send(200);
+        });
+    });
 });
 
 var port = process.env.PORT || 5000;
