@@ -698,29 +698,6 @@ app.get('/user/:user_id/json', function (request, response) {
     });
 });
 
-app.post('/shoppinglist/:shoppinglist_id/delete/json', function (request, response) {
-    "use strict";
-    pool.getConnection(function (err, connection) {
-        if (err) {
-            console.log('error : ', err);
-            throw err;
-        }       
-        var shoppinglist_id = request.params.shoppinglist_id;
-        var sql = "delete from shoppinglist where id=" + shoppinglist_id + ";";
-        connection.query(sql, function (err) {
-            if (err) {
-                console.log('error : ', err);
-                connection.release();
-                throw err;
-            }
-            connection.commit();
-            sleep(1000);
-            connection.release();
-            response.send(200);
-        });
-    });
-});
-
 
 app.delete('/user/:user_id/json', function (request, response) {
     "use strict";
@@ -788,6 +765,30 @@ app.get('/shoppinglist/:shoppinglist_id/json', function (request, response) {
             sleep(1000);
             connection.release();
             response.send(rows);
+        });
+    });
+});
+
+
+app.post('/shoppinglist/:shoppinglist_id/delete/json', function (request, response) {
+    "use strict";
+    pool.getConnection(function (err, connection) {
+        if (err) {
+            console.log('error : ', err);
+            throw err;
+        }       
+        var shoppinglist_id = request.params.shoppinglist_id;
+        var sql = "delete from shoppinglist where id=" + shoppinglist_id + ";";
+        connection.query(sql, function (err) {
+            if (err) {
+                console.log('error : ', err);
+                connection.release();
+                throw err;
+            }
+            connection.commit();
+            sleep(1000);
+            connection.release();
+            response.send(200);
         });
     });
 });
