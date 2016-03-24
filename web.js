@@ -16,7 +16,6 @@ app.use(bodyParser.urlencoded({extended: true}));
 app.use(function (req, res, next) {
     "use strict";
     res.header("Access-Control-Allow-Origin", "*");
-    res.header('Access-Control-Allow-Methods', 'DELETE');
     res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
     next();
 });
@@ -866,6 +865,30 @@ app.get('/item/:item_id/json', function (request, response) {
 });
 
 
+app.post('/item/:item_id/delete/json', function (request, response) {
+    "use strict";
+    pool.getConnection(function (err, connection) {
+        if (err) {
+            console.log('error : ', err);
+            throw err;
+        }       
+        var item_id = request.params.item_id;
+        var sql = "delete from item where id=" + item_id + ";";
+        connection.query(sql, function (err) {
+            if (err) {
+                console.log('error : ', err);
+                connection.release();
+                throw err;
+            }
+            connection.commit();
+            sleep(1000);
+            connection.release();
+            response.send(200);
+        });
+    });
+});
+
+
 app.delete('/item/:item_id/json', function (request, response) {
     "use strict";
     pool.getConnection(function (err, connection) {
@@ -934,6 +957,31 @@ app.get('/shoppinglist/:shoppinglist_id/item/:item_id/json', function (request, 
             sleep(1000);
             connection.release();
             response.send(rows);
+        });
+    });
+});
+
+
+app.post('/shoppinglist/:shoppinglist_id/item/:item_id/delete/json', function (request, response) {
+    "use strict";
+    pool.getConnection(function (err, connection) {
+        if (err) {
+            console.log('error : ', err);
+            throw err;
+        }
+        var shoppinglist_id = request.params.shoppinglist_id;   
+        var item_id = request.params.item_id;
+        var sql = "delete from item where shoppinglist_id=" + shoppinglist_id + " and id=" + item_id + ";";
+        connection.query(sql, function (err) {
+            if (err) {
+                console.log('error : ', err);
+                connection.release();
+                throw err;
+            }
+            connection.commit();
+            sleep(1000);
+            connection.release();           
+            response.send(200);
         });
     });
 });
