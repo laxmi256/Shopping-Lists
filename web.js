@@ -16,8 +16,13 @@ app.use(bodyParser.urlencoded({extended: true}));
 app.use(function (req, res, next) {
     "use strict";
     res.header("Access-Control-Allow-Origin", "*");
+    res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS');
     res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-    next();
+    if (req.method == 'OPTIONS') {
+        res.status(200).end();
+    } else {
+        next();
+    }
 });
 
 var pool = mysql.createPool({
@@ -751,8 +756,18 @@ app.delete('/user/:user_id/json', function (request, response) {
             }
             connection.commit();
             sleep(1000);
-            connection.release();
-            response.send(200);
+            var sql = 'select * from user;';
+            connection.query(sql, function (err, rows) {
+                if (err) {
+                    console.log('error : ', err);
+                    connection.release();
+                    throw err;
+                }
+                connection.commit();
+                sleep(1000);
+                connection.release();
+                response.send(rows);
+            });
         });
     });
 });
