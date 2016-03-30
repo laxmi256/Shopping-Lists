@@ -1513,7 +1513,9 @@ app.put('/user/:user_id/edit1/json', function (request, response) {
         var email = request.body.email;
         var picture = request.body.picture;
         var provider = request.body.provider;
-        var sql = "update user set name=" + name + ", email=" + email + ", picture=" + picture + ", provider=" + provider + " where id=" + user_id + ";";
+        var user_id = request.params.user_id;
+        //var sql = "update user set name=" + name + ", email=" + email + ", picture=" + picture + ", provider=" + provider + " where id=" + user_id + ";";
+        var sql = "update user set name=Ram where id=" + user_id + ";";
         connection.query(sql, function (err) {
             if (err) {
                 console.log('error : ', err);
