@@ -1533,7 +1533,7 @@ app.put('/user/:user_id/edit1/json', function (request, response) {
                 connection.commit();
                 sleep(1000);
                 connection.release();
-                response.send(rows);
+                response.send(sql1);
             });
         });
     });
