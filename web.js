@@ -703,43 +703,6 @@ app.get('/user/:user_id/json', function (request, response) {
 });
 
 
-app.put('/user/:user_id/json', function (request, response) {
-    "use strict";
-    pool.getConnection(function (err, connection) {
-        if (err) {
-            console.log('error : ', err);
-            throw err;
-        }        
-        var name = request.body.name;
-        var email = request.body.email;
-        var picture = request.body.picture;
-        var provider = request.body.provider;
-        var sql = "update user set name=" + "\"" + name + "\", " + email=" + "\"" + email + "\", " picture=" + "\"" + picture + "\", " provider=" + "\"" + provider + "\";";
-        response.send(sql);
-        connection.query(sql, function (err) {
-            if (err) {
-                console.log('error : ', err);
-                throw err;
-            }
-            connection.commit();
-            sleep(1000);
-            var sql = "select * from user;";
-            connection.query(sql, function (err, rows) {
-                if (err) {
-                    console.log('error : ', err);
-                    connection.release();
-                    throw err;
-                }
-                connection.commit();
-                sleep(1000);
-                connection.release();
-                response.send(rows);
-            });
-        });
-    });
-});
-
-
 app.post('/user/new/json', function (request, response) {
     "use strict";
     pool.getConnection(function (err, connection) {
