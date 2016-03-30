@@ -1514,8 +1514,8 @@ app.put('/user/:user_id/edit1/json', function (request, response) {
         var picture = request.body.picture;
         var provider = request.body.provider;
         var user_id = request.params.user_id;
-        var sql1 = "update user set name=\"" + name + "\", email=\"" + email + "\", picture=\"" + picture + "\", provider=\"" + provider + "\" where id=" + user_id + ";";
-        var sql = "select * from user;";
+        var sql = "update user set name=\"" + name + "\", email=\"" + email + "\", picture=\"" + picture + "\", provider=\"" + provider + "\" where id=" + user_id + ";";
+        //var sql = "select * from user;";
         connection.query(sql, function (err) {
             if (err) {
                 console.log('error : ', err);
@@ -1533,7 +1533,7 @@ app.put('/user/:user_id/edit1/json', function (request, response) {
                 connection.commit();
                 sleep(1000);
                 connection.release();
-                response.send(sql1);
+                response.send(rows);
             });
         });
     });
