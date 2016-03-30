@@ -1502,17 +1502,40 @@ app.delete('/shoppinglist/:shoppinglist_id/item/:item_id/delete/json', function 
     });
 });
 
-app.put('/user/:user_id/edit1/json', function (request, response) {
+app.put('/user/:user_id/edit/json', function (request, response) {
     "use strict";
     pool.getConnection(function (err, connection) {
         if (err) {
             console.log('error : ', err);
             throw err;
         }        
-        
-        connection.release();
-        response.send("HELLO");
-        //resonse.send(name + ', ' + email + ', ' + picture + ', ' + provider);
+        /*var name = request.body.name;
+        var email = request.body.email;
+        var picture = request.body.picture;
+        var provider = request.body.provider;
+        var sql = "update user set name = " + name + ", email = " + email + ", picture = " + picture + " and provider = " + provider + ";";
+        */
+        var sql = "select * from user;";
+        connection.query(sql, function (err) {
+            if (err) {
+                console.log('error : ', err);
+                throw err;
+            }
+            connection.commit();
+            sleep(1000);
+            var sql = "select * from user;";
+            connection.query(sql, function (err, rows) {
+                if (err) {
+                    console.log('error : ', err);
+                    connection.release();
+                    throw err;
+                }
+                connection.commit();
+                sleep(1000);
+                connection.release();
+                response.send(rows);
+            });
+        });
     });
 });
 
