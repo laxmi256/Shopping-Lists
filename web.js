@@ -1515,6 +1515,7 @@ app.put('/user/:user_id/edit1/json', function (request, response) {
         var provider = request.body.provider;
         
         resonse.send(name + ', ' + email + ', ' + picture + ', ' + provider);*/
+        response.send("HELLO");
         sleep(1000);
         connection.release();
     });
