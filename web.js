@@ -1509,10 +1509,10 @@ app.put('/user/:user_id/edit1/json', function (request, response) {
             console.log('error : ', err);
             throw err;
         }        
-        /*var name = request.body.name;
+        var name = request.body.name;
         var email = request.body.email;
         var picture = request.body.picture;
-        var provider = request.body.provider;
+        var provider = request.body.provider;/*
         var sql = "update user set name = " + name + ", email = " + email + ", picture = " + picture + " and provider = " + provider + ";";
         */
         var sql = "select * from user;";
