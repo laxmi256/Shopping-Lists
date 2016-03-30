@@ -1509,14 +1509,10 @@ app.put('/user/:user_id/edit1/json', function (request, response) {
             console.log('error : ', err);
             throw err;
         }        
-        var name = request.body.name;
-        var email = request.body.email;
-        var picture = request.body.picture;
-        var provider = request.body.provider;
-        sleep(1000);
+        
         connection.release();
-        //response.send("HELLO");
-        resonse.send(name + ', ' + email + ', ' + picture + ', ' + provider);
+        response.send("HELLO");
+        //resonse.send(name + ', ' + email + ', ' + picture + ', ' + provider);
     });
 });
 
