@@ -1502,6 +1502,22 @@ app.delete('/shoppinglist/:shoppinglist_id/item/:item_id/delete/json', function 
     });
 });
 
+app.put('/users/:user_id/edit/json', function (request, response) {
+    "use strict";
+    pool.getConnection(function (err, connection) {
+        if (err) {
+            console.log('error : ', err);
+            throw err;
+        }        
+        var name = request.body.name;
+        var email = request.body.email;
+        var picture = request.body.picture;
+        var provider = request.body.provider;
+        
+        resonse.send(name + ', ' + email + ', ' + picture + ', ' + provider)
+    });
+});
+
 var port = process.env.PORT || 5000;
 app.listen(port, function () {
     "use strict";
