@@ -703,6 +703,78 @@ app.get('/user/:user_id/json', function (request, response) {
 });
 
 
+app.post('/user/:user_id/edit/json', function (request, response) {
+    "use strict";
+    pool.getConnection(function (err, connection) {
+        if (err) {
+            console.log('error : ', err);
+            throw err;
+        }        
+        var name = request.body.name;
+        var email = request.body.email;
+        var picture = request.body.picture;
+        var provider = request.body.provider;
+        var sql = "update user set name = " + name + ", email = " + email + ", picture = " + picture + " and provider = " + provider + ";";
+        connection.query(sql, function (err) {
+            if (err) {
+                console.log('error : ', err);
+                throw err;
+            }
+            connection.commit();
+            sleep(1000);
+            var sql = "select * from user;";
+            connection.query(sql, function (err, rows) {
+                if (err) {
+                    console.log('error : ', err);
+                    connection.release();
+                    throw err;
+                }
+                connection.commit();
+                sleep(1000);
+                connection.release();
+                response.send(rows);
+            });
+        });
+    });
+});
+
+
+app.put('/user/:user_id/edit/json', function (request, response) {
+    "use strict";
+    pool.getConnection(function (err, connection) {
+        if (err) {
+            console.log('error : ', err);
+            throw err;
+        }        
+        var name = request.body.name;
+        var email = request.body.email;
+        var picture = request.body.picture;
+        var provider = request.body.provider;
+        var sql = "update user set name = " + name + ", email = " + email + ", picture = " + picture + " and provider = " + provider + ";";
+        connection.query(sql, function (err) {
+            if (err) {
+                console.log('error : ', err);
+                throw err;
+            }
+            connection.commit();
+            sleep(1000);
+            var sql = "select * from user;";
+            connection.query(sql, function (err, rows) {
+                if (err) {
+                    console.log('error : ', err);
+                    connection.release();
+                    throw err;
+                }
+                connection.commit();
+                sleep(1000);
+                connection.release();
+                response.send(rows);
+            });
+        });
+    });
+});
+
+
 app.post('/user/new/json', function (request, response) {
     "use strict";
     pool.getConnection(function (err, connection) {
@@ -820,6 +892,76 @@ app.get('/shoppinglist/:shoppinglist_id/json', function (request, response) {
 });
 
 
+app.post('/shoppingList/:shoppinglist_id/edit/json', function (request, response) {
+    "use strict";
+    pool.getConnection(function (err, connection) {
+        if (err) {
+            console.log('error : ', err);
+            throw err;
+        }
+        var name = request.body.name;
+        var shoppinglist_id = request.params.shoppinglist_id;
+        var sql = "update shoppinglist set name = " + name + " where id = " + shoppinglist_id + ";";
+        connection.query(sql, function (err) {
+            if (err) {
+                console.log('error : ', err);
+                connection.release();
+                throw err;
+            }
+            connection.commit();
+            sleep(1000);
+            var sql = "select * from shoppinglist where id=" + shoppinglist_id + ";";
+            connection.query(sql, function (err, rows) {
+                if (err) {
+                    console.log('error : ', err);
+                    connection.release();
+                    throw err;
+                }
+                connection.commit();
+                sleep(1000);
+                connection.release();
+                response.send(rows);
+            });
+        });
+    });
+});
+
+
+app.put('/shoppingList/:shoppinglist_id/edit/json', function (request, response) {
+    "use strict";
+    pool.getConnection(function (err, connection) {
+        if (err) {
+            console.log('error : ', err);
+            throw err;
+        }
+        var name = request.body.name;
+        var shoppinglist_id = request.params.shoppinglist_id;
+        var sql = "update shoppinglist set name = " + name + " where id = " + shoppinglist_id + ";";
+        connection.query(sql, function (err) {
+            if (err) {
+                console.log('error : ', err);
+                connection.release();
+                throw err;
+            }
+            connection.commit();
+            sleep(1000);
+            var sql = "select * from shoppinglist where id=" + shoppinglist_id + ";";
+            connection.query(sql, function (err, rows) {
+                if (err) {
+                    console.log('error : ', err);
+                    connection.release();
+                    throw err;
+                }
+                connection.commit();
+                sleep(1000);
+                connection.release();
+                response.send(rows);
+            });
+        });
+    });
+});
+
+
 app.post('/shoppinglist/new/json', function (request, response) {
     "use strict";
     pool.getConnection(function (err, connection) {
@@ -879,7 +1021,7 @@ app.post('/shoppinglist/:shoppinglist_id/delete/json', function (request, respon
 });
 
 
-app.delete('/shoppinglist/:shoppinglist_id/json', function (request, response) {
+app.delete('/shoppinglist/:shoppinglist_id/delete/json', function (request, response) {
     "use strict";
     pool.getConnection(function (err, connection) {
         if (err) {
@@ -960,6 +1102,75 @@ app.get('/item/:item_id/json', function (request, response) {
     });
 });
 
+app.post('/item/:item_id/edit/json', function (request, response) {
+    "use strict";
+    pool.getConnection(function (err, connection) {
+        if (err) {
+            console.log('error : ', err);
+            throw err;
+        }        
+        var name = request.body.name;
+        var quantity = request.body.quantity;
+        var item_id = request.params.item_id;
+        var sql = "update item set name = " + name + " and quantity = " + quantity + " where id = " + item_id + ";";
+        connection.query(sql, function (err) {
+            if (err) {
+                console.log('error : ', err);
+                throw err;
+            }
+            connection.commit();
+            sleep(1000);
+            var sql = "select * from item;";
+            connection.query(sql, function (err, rows) {
+                if (err) {
+                    console.log('error : ', err);
+                    connection.release();
+                    throw err;
+                }
+                connection.commit();
+                sleep(1000);
+                connection.release();
+                response.send(rows);
+            });
+        });
+    });
+});
+
+
+app.put('/item/:item_id/edit/json', function (request, response) {
+    "use strict";
+    pool.getConnection(function (err, connection) {
+        if (err) {
+            console.log('error : ', err);
+            throw err;
+        }        
+        var name = request.body.name;
+        var quantity = request.body.quantity;
+        var item_id = request.params.item_id;
+        var sql = "update item set name = " + name + " and quantity = " + quantity + " where id = " + item_id + ";";
+        connection.query(sql, function (err) {
+            if (err) {
+                console.log('error : ', err);
+                throw err;
+            }
+            connection.commit();
+            sleep(1000);
+            var sql = "select * from item;";
+            connection.query(sql, function (err, rows) {
+                if (err) {
+                    console.log('error : ', err);
+                    connection.release();
+                    throw err;
+                }
+                connection.commit();
+                sleep(1000);
+                connection.release();
+                response.send(rows);
+            });
+        });
+    });
+});
+
 
 app.post('/item/new/json', function (request, response) {
     "use strict";
@@ -1014,14 +1225,24 @@ app.post('/item/:item_id/delete/json', function (request, response) {
             }
             connection.commit();
             sleep(1000);
-            connection.release();
-            response.send(200);
+            var sql = "select * from item;";
+            connection.query(sql, function (err, rows) {
+                if (err) {
+                    console.log('error : ', err);
+                    connection.release();
+                    throw err;
+                }
+                connection.commit();
+                sleep(1000);
+                connection.release();
+                response.send(rows);
+            });
         });
     });
 });
 
 
-app.delete('/item/:item_id/json', function (request, response) {
+app.delete('/item/:item_id/delete/json', function (request, response) {
     "use strict";
     pool.getConnection(function (err, connection) {
         if (err) {
@@ -1103,6 +1324,79 @@ app.get('/shoppinglist/:shoppinglist_id/item/:item_id/json', function (request, 
     });
 });
 
+app.post('/shoppingList/:shoppinglist_id/item/:item_id/edit/json', function (request, response) {
+    "use strict";
+    pool.getConnection(function (err, connection) {
+        if (err) {
+            console.log('error : ', err);
+            throw err;
+        }
+        var name = request.body.name;
+        var quantity = request.body.quantity;
+        var item_id = request.params.item_id;
+        var shoppinglist_id = request.params.shoppinglist_id;
+        var sql = "update item set name = " + name + " and quantity = " + quantity + " where shoppinglist_id = " + shoppinglist_id + " and id = " + item_id + ";";
+        connection.query(sql, function (err) {
+            if (err) {
+                console.log('error : ', err);
+                connection.release();
+                throw err;
+            }
+            connection.commit();
+            sleep(1000);
+            var sql = "select * from item where shoppinglist_id=" + shoppinglist_id + " and id=" + item_id + ";";
+            connection.query(sql, function (err, rows) {
+                if (err) {
+                    console.log('error : ', err);
+                    connection.release();
+                    throw err;
+                }
+                connection.commit();
+                sleep(1000);
+                connection.release();
+                response.send(rows);
+            });
+        });
+    });
+});
+
+
+app.put('/shoppingList/:shoppinglist_id/item/:item_id/edit/json', function (request, response) {
+    "use strict";
+    pool.getConnection(function (err, connection) {
+        if (err) {
+            console.log('error : ', err);
+            throw err;
+        }
+        var name = request.body.name;
+        var quantity = request.body.quantity;
+        var item_id = request.params.item_id;
+        var shoppinglist_id = request.params.shoppinglist_id;
+        var sql = "update item set name = " + name + " and quantity = " + quantity + " where shoppinglist_id = " + shoppinglist_id + " and id = " + item_id + ";";
+        connection.query(sql, function (err) {
+            if (err) {
+                console.log('error : ', err);
+                connection.release();
+                throw err;
+            }
+            connection.commit();
+            sleep(1000);
+            var sql = "select * from item where shoppinglist_id=" + shoppinglist_id + " and id=" + item_id + ";";
+            connection.query(sql, function (err, rows) {
+                if (err) {
+                    console.log('error : ', err);
+                    connection.release();
+                    throw err;
+                }
+                connection.commit();
+                sleep(1000);
+                connection.release();
+                response.send(rows);
+            });
+        });
+    });
+});
+
 
 app.post('/shoppinglist/:shoppinglist_id/item/new/json', function (request, response) {
     "use strict";
@@ -1174,7 +1468,7 @@ app.post('/shoppinglist/:shoppinglist_id/item/:item_id/delete/json', function (r
 });
 
 
-app.delete('/shoppinglist/:shoppinglist_id/item/:item_id/json', function (request, response) {
+app.delete('/shoppinglist/:shoppinglist_id/item/:item_id/delete/json', function (request, response) {
     "use strict";
     pool.getConnection(function (err, connection) {
         if (err) {
