@@ -1502,7 +1502,7 @@ app.delete('/shoppinglist/:shoppinglist_id/item/:item_id/delete/json', function 
     });
 });
 
-app.put('/users/:user_id/edit/json', function (request, response) {
+app.put('/user/:user_id/edit1/json', function (request, response) {
     "use strict";
     pool.getConnection(function (err, connection) {
         if (err) {
