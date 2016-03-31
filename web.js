@@ -723,7 +723,7 @@ app.put('/user/:user_id/edit/json', function (request, response) {
             }
             connection.commit();
             sleep(1000);
-            var sql = "select * from user;";
+            var sql = "select * from user where id=" + user_id + ";";
             connection.query(sql, function (err, rows) {
                 if (err) {
                     console.log('error : ', err);
@@ -876,7 +876,7 @@ app.put('/shoppinglist/:shoppinglist_id/edit/json', function (request, response)
             }
             connection.commit();
             sleep(1000);
-            var sql = "select * from shoppinglist;";
+            var sql = "select * from shoppinglist where id=" + shoppinglist_id + ";";
             connection.query(sql, function (err, rows) {
                 if (err) {
                     console.log('error : ', err);
@@ -1020,7 +1020,7 @@ app.put('/item/:item_id/edit/json', function (request, response) {
         var name = request.body.name;
         var quantity = request.body.quantity;
         var item_id = request.params.item_id;
-        var sql = "update item set name = \"" + name + "\" and quantity = \"" + quantity + "\" where id = " + item_id + ";";
+        var sql = "update item set name = \'" + name + "\' and quantity = /'" + quantity + "\' where id = " + item_id + ";";
         connection.query(sql, function (err) {
             if (err) {
                 console.log('error : ', err);
@@ -1028,7 +1028,7 @@ app.put('/item/:item_id/edit/json', function (request, response) {
             }
             connection.commit();
             sleep(1000);
-            var sql = "select * from item;";
+            var sql = "select * from item where id=" + item_id + ";";
             connection.query(sql, function (err, rows) {
                 if (err) {
                     console.log('error : ', err);
