@@ -1056,8 +1056,7 @@ app.post('/item/new/json', function (request, response) {
         var quantity = request.body.quantity;
         var shoppinglist_id = request.body.shoppinglist_id;
         var user_id = request.body.user_id;
-        var sql1 = "insert into item (name, quantity, shoppinglist_id, user_id) values (\'" + name + "\', \'" + quantity + "\', " + shoppinglist_id + ", " + user_id + ");";
-        var sql = "select * from item;";
+        var sql = "insert into item (name, quantity, shoppinglist_id, user_id) values (\'" + name + "\', \'" + quantity + "\', " + shoppinglist_id + ", " + user_id + ");";
         connection.query(sql, function (err) {
             if (err) {
                 console.log('error : ', err);
@@ -1075,7 +1074,7 @@ app.post('/item/new/json', function (request, response) {
                 connection.commit();
                 sleep(1000);
                 connection.release();
-                response.send(sql1);
+                response.send(rows);
             });
         });
     });
