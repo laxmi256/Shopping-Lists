@@ -1020,8 +1020,7 @@ app.put('/item/:item_id/edit/json', function (request, response) {
         var name = request.body.name;
         var quantity = request.body.quantity;
         var item_id = request.params.item_id;
-        var sql1 = "update item set name=\'" + name + "\', quantity=\'" + quantity + "\' where id=" + item_id + ";";
-        var sql = "select * from item where id=" + item_id + ";";
+        var sql = "update item set name=\'" + name + "\', quantity=\'" + quantity + "\' where id=" + item_id + ";";
         connection.query(sql, function (err) {
             if (err) {
                 console.log('error : ', err);
@@ -1039,7 +1038,7 @@ app.put('/item/:item_id/edit/json', function (request, response) {
                 connection.commit();
                 sleep(1000);
                 connection.release();
-                response.send(sql1);
+                response.send(rows);
             });
         });
     });
