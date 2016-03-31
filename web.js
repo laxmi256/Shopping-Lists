@@ -1020,7 +1020,7 @@ app.put('/item/:item_id/edit/json', function (request, response) {
         var name = request.body.name;
         var quantity = request.body.quantity;
         var item_id = request.params.item_id;
-        var sql = "update item set name = \'" + name + "\' and quantity = /'" + quantity + "\' where id = " + item_id + ";";
+        var sql = "update item set name=\'" + name + "\', quantity=/'" + quantity + "\' where id=" + item_id + ";";
         connection.query(sql, function (err) {
             if (err) {
                 console.log('error : ', err);
@@ -1056,7 +1056,7 @@ app.post('/item/new/json', function (request, response) {
         var quantity = request.body.quantity;
         var shoppinglist_id = request.body.shoppinglist_id;
         var user_id = request.body.user_id;
-        var sql = "insert into item (name, quantity, shoppinglist_id, user_id) values (\"" + name + "\", \"" + quantity + "\", " + shoppinglist_id + ", " + user_id + ");";
+        var sql = "insert into item (name, quantity, shoppinglist_id, user_id) values (\'" + name + "\', \'" + quantity + "\', " + shoppinglist_id + ", " + user_id + ");";
         connection.query(sql, function (err) {
             if (err) {
                 console.log('error : ', err);
