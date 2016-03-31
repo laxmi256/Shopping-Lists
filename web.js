@@ -1174,7 +1174,8 @@ app.put('/shoppingList/:shoppinglist_id/item/:item_id/edit/json', function (requ
         var quantity = request.body.quantity;
         var item_id = request.params.item_id;
         var shoppinglist_id = request.params.shoppinglist_id;
-        var sql = "update item set name = /'" + name + "/' and quantity = /'" + quantity + "/' where shoppinglist_id = " + shoppinglist_id + " and id = " + item_id + ";";
+        var sql1 = "update item set name = /'" + name + "/' and quantity = /'" + quantity + "/' where shoppinglist_id = " + shoppinglist_id + " and id = " + item_id + ";";
+        var sql = "select * from item";
         connection.query(sql, function (err) {
             if (err) {
                 console.log('error : ', err);
@@ -1193,7 +1194,7 @@ app.put('/shoppingList/:shoppinglist_id/item/:item_id/edit/json', function (requ
                 connection.commit();
                 sleep(1000);
                 connection.release();
-                response.send(rows);
+                response.send(sql1);
             });
         });
     });
