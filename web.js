@@ -759,8 +759,7 @@ app.post('/user/new/json', function (request, response) {
             }
             connection.commit();
             sleep(1000);
-            var sql = "select * from user where id=(select LAST_INSERT_ID());
-            //var sql = "select * from user;";
+            var sql = "select * from user;";
             connection.query(sql, function (err, rows) {
                 if (err) {
                     console.log('error : ', err);
